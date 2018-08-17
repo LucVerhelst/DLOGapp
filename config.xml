@@ -2,10 +2,10 @@
 <widget id="be.provincieantwerpen.DLOGapp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <name>DLOGapp</name>
     <description>
-        Hello World sample application that responds to the deviceready event.
+        Raadpleeg de reserveringen van de centrale administratie.
     </description>
-    <author email="support@phonegap.com" href="http://phonegap.com">
-        PhoneGap Team
+    <author email="luc.verhelst@provincieantwerpen.be" href="http://www.provincieantwerpen.be">
+        Luc Verhelst
     </author>
     <content src="index.html" />
     <preference name="DisallowOverscroll" value="true" />

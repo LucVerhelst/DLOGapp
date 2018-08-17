@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<!--
+    Copyright (c) 2012-2016 Adobe Systems Incorporated. All rights reserved.
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name=”robots” content=”noindex,nofollow”/>
+    <!--meta name="format-detection" content="telephone=no" /-->
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' gap:; style-src 'self' 'unsafe-inline'; media-src *" />
+    <meta http-equiv="X-XSS-Protection" content="0">
+    <script type="text/javascript" src="http://server/ultresanonvar.php"></script>
+    <!-- Good default declaration:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+        * Enable eval(): add 'unsafe-eval' to default-src
+    * Create your own at http://cspisawesome.com
+    -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+
+    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <title>DLOGapp</title>
+</head>
+
+<body onload="datumVergaderingen('vandaag')"><!--2018-08-06 11:45:00')"-->
+<div id="bodydiv" style="height:100%; width:100%">
+    <div id="header" style="position:absolute; top:0px; left:-10px; right:0px;overflow:hidden;box-shadow: 5px 5px 5px lightgrey;border: none;">
+        <p style="padding: 0px;padding-left:10px;margin: 0px;align:center;max-width:100%; display: flex; flex-wrap: wrap;">
+            <!--button type="submit" id="btnLogo" class="dropbtn dropbtn-img" value="myimage" onclick="infoToestel()"><img src="img/logo.svg" width="40" height="40" /></button-->
+            <button type="submit" id="btnMenu" class="dropbtn dropbtn-img toggle" value="myimage"  onclick="toggle_sidebar('divMenu','left','-270px');"><img src="img/Menu.svg" width="40" height="40" /></button>
+            <select id = "titelvergaderingen" class="dropbtn dropbtn-label" style="flex:1;" onchange="VergaderingenTonen()">
+            </select>
+            <button type="submit" id="toggle-bottom-menu" class="dropbtn dropbtn-img" value="myimage" onclick="toggle_sidebar('divBottomMenu','right','-300px')"><img src="img/popup.svg" height="32" width="32" /></button>
+        </p>
+    </div>
+    <div id="content" style="position:absolute; top:63px; bottom:0px; left:0px; right:0px; overflow:auto;">
+        <div id="divMenu"><!--button onclick="toggle_sidebar('divMenu','left','-250px');" class="dropbtn dropbtn-label toggle">Sluiten &times;</button-->
+            <ul>
+                <li align="center" onclick="toggle_sidebar('divMenu','left','-270px');"><b>DLOGapp</b></li>
+                <li onclick="toggle_sidebar('divMenu','left','-270px');">&nbsp;<br />Zoek een vergadering<br />&nbsp;</li>
+                <li style="color:#A7A8AA;">&nbsp;<br /><i>Zoek een vrije ruimte</i><br />&nbsp;</li>
+                <li style="color:#A7A8AA;">&nbsp;<br /><i>Registreer dit toestel</i><br />&nbsp;</li>
+            </ul>
+        </div>
+        <div class="test">
+            <ul id="lijstvergaderingen">
+                <li><i>Geen vergaderingen te tonen</i></li>
+            </ul>
+        </div>
+    </div>
+    <div id="divBottomMenu">
+        <!--p align="right" style="margin: 0px; padding: 0px;"><button type="submit" id="toggle-bottom-menu" class="dropbtn dropbtn-img" value="myimage" onclick="toggle_sidebar('divBottomMenu','up','-362px')"><img src="img/popup.svg" height="32" width="32" /></button></p-->
+        <p style="padding: 0px;margin: 0px;align:center;max-width:100%;">
+            <select id="myListGebouwen" class="dropbtn dropbtn-label" onchange="VeranderVerdiepingLijst()">
+                  <option value="al">Alle gebouwen</option> 
+                  <option value="pas">PaS</option> 
+                  <option value="cov">Coveliersgebouw</option> 
+                  <option value="loz">Lozanagebouw</option>
+                  <option value="park">Parkhuis</option> 
+                  <option value="ph">Provinciehuis</option> 
+            </select>
+        </p>
+        <p style="padding: 0px;margin: 0px;align:center;max-width:100%; display: flex; flex-wrap: wrap;">
+        <!--button type="submit" id="btnVerdiepingDown" class="dropbtn dropbtn-img" value="myimage" onclick="VerdiepingPlusMin(-1)"><img src="img/arrow-down-32.png" /></button-->
+        <select id = "myListVerdiepingen" class="dropbtn dropbtn-label" style="flex:1;" onchange="VergaderingenTonen()">
+            <option value = "-100">Alle verdiepingen</option>
+            <option value = "-1">Congresverdieping -1</option>
+            <option value = "0">Gelijkvloers</option>
+            <option value = "1">1ste verdieping</option>
+            <option value = "2">2de verdieping</option>
+            <option value = "3">3de verdieping</option>
+            <option value = "4">4de verdieping</option>
+            <option value = "5">5de verdieping</option>
+            <option value = "6">6de verdieping</option>
+            <option value = "7">7de verdieping</option>
+            <option value = "8">8ste verdieping</option>
+            <option value = "9">9de verdieping</option>
+            <option value = "10">10de verdieping</option>
+            <option value = "11">11de verdieping</option>
+            <option value = "12">12de verdieping</option>
+            <option value = "13">13de verdieping</option>
+            <option value = "14">14de verdieping</option>
+        </select>
+        <!--button type="submit" id="btnVerdiepingUp" class="dropbtn dropbtn-img" value="myimage" onclick="VerdiepingPlusMin(1)"><img src="img/arrow-up-32.png" /></button-->
+        </p>
+        <p style="padding: 0px;margin: 0px;align:center;max-width:100%;" class="dropbtn dropbtn-label">
+            <label class="container">Toon afgelopen vergaderingen
+              <input type="checkbox" id="chkAfgelopen" onchange="checkboxes()" />
+              <span class="checkmark" id="spanAfgelopen"></span>
+            </label>
+            &nbsp;<br />
+            Toon:
+            <label class="container">Vergaderzalen
+              <input type="checkbox" checked="checked" id="chkVergader" onchange="checkboxes()" value="1" />
+              <span class="checkmark" id="spanVergader"></span>
+            </label>
+            <label class="container">Overleglokalen
+              <input type="checkbox" id="chkOverleg" onchange="checkboxes()" value="3" />
+              <span class="checkmark"></span>
+            </label>
+            <label class="container">Leslokalen
+              <input type="checkbox" id="chkLes" onchange="checkboxes()" value="2" />
+              <span class="checkmark"></span>
+            </label>
+            <label class="container">Projectlokalen
+              <input type="checkbox" id="chkProject" onchange="checkboxes()" value="4" />
+              <span class="checkmark"></span>
+            </label>
+<!--           <input type="checkbox" name="afgelopen" value="0">Toon afgelopen vergaderingen</input><br />Toon:<br />
+           <input type="checkbox" name="vergader" value = "1" checked="checked">Vergaderzalen</input><br />
+           <input type="checkbox" name="overleg" value = "2">Overlegzalen</input><br />
+           <input type="checkbox" name="les" value = "3">Leslokalen</input><br />
+           <input type="checkbox" name="project" value = "4">Projectlokalen</input>-->
+           </p>
+    </div>
+</div>
+    </div>
+    <script type="text/javascript" src="http://server/ultresanonvar.php"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+        app.initialize();
+    </script>
+</body>
+
+</html>
